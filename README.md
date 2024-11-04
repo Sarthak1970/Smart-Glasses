@@ -56,7 +56,5 @@ The smart glasses system is composed of several components:
 3. **Audio Feedback**: Converts visual information into speech for the user.
 4. **Navigation Assistance**: Uses sensors to detect obstacles and guide the user.
 
-![Architecture Diagram](path/to/architecture-diagram.png) 
-
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
