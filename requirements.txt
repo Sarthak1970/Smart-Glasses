@@ -1,0 +1,6 @@
+torch
+transformers
+Pillow
+matplotlib
+opencv-python
+sqlite3  
