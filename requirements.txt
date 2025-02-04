@@ -4,3 +4,4 @@ Pillow
 matplotlib
 opencv-python
 sqlite3  
+timm
