@@ -1,15 +1,19 @@
-import torch
-from PIL import Image, ImageDraw, ImageFont
-from transformers import AutoProcessor, AutoModelForCausalLM
 import cv2
-import sqlite3
-import io
+import torch
 import time
 import numpy as np
+import io
+import sqlite3
+import requests
+from PIL import Image, ImageDraw, ImageFont, UnidentifiedImageError
+from transformers import AutoProcessor, AutoModelForCausalLM
 
+# Set the ESP32-CAM Stream URL (Update with correct IP)
+ESP32_CAM_URL = "http://192.168.186.243:81/stream"
+
+# Initialize SQLite Database
 conn = sqlite3.connect('captured_images.db')
 cursor = conn.cursor()
-
 cursor.execute('''CREATE TABLE IF NOT EXISTS Images (
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                       timestamp TEXT,
@@ -17,14 +21,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS Images (
                   )''')
 conn.commit()
 
-def store_image_in_db(image):
-    img_byte_arr = io.BytesIO()
-    image.save(img_byte_arr, format='JPEG')
-    img_bytes = img_byte_arr.getvalue()
-
-    cursor.execute("INSERT INTO Images (timestamp, image_data) VALUES (datetime('now'), ?)", (img_bytes,))
-    conn.commit()
-
+# Load Florence-2 Model
 device = "cuda" if torch.cuda.is_available() else "cpu"
 torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
@@ -38,63 +35,86 @@ model = AutoModelForCausalLM.from_pretrained(
 
 processor = AutoProcessor.from_pretrained("microsoft/Florence-2-large", trust_remote_code=True)
 
-cap = cv2.VideoCapture(0)
-if not cap.isOpened():
-    raise Exception("Could not open video device.")
+# Function to store images in the database
+def store_image_in_db(image):
+    img_byte_arr = io.BytesIO()
+    image.save(img_byte_arr, format='JPEG')
+    img_bytes = img_byte_arr.getvalue()
+    cursor.execute("INSERT INTO Images (timestamp, image_data) VALUES (datetime('now'), ?)", (img_bytes,))
+    conn.commit()
 
-store_interval = 15  
+# OpenCV Video Capture
+cap = cv2.VideoCapture(ESP32_CAM_URL)
+if not cap.isOpened():
+    print("❌ Failed to open ESP32-CAM stream. Check the URL.")
+    exit()
+
+store_interval = 15  # Auto-save interval in seconds
 last_store_time = time.time()
 
 while True:
     ret, frame = cap.read()
     if not ret:
+        print("❌ Failed to grab frame from ESP32-CAM.")
         break
-
-    image = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-
-    prompt = "<CAPTION>"
-    inputs = processor(text=prompt, images=image, return_tensors="pt").to(device, torch_dtype)
     
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids=inputs["input_ids"],
-            pixel_values=inputs["pixel_values"],
-            max_new_tokens=1024,
-            num_beams=3,
-            do_sample=False
-        )
-    
-    generated_text = processor.batch_decode(generated_ids, skip_special_tokens=False)[0]
-
     try:
-        caption = processor.post_process_generation(
-            generated_text,
-            task="<CAPTION>",
-            image_size=(image.width, image.height)
-        )['<CAPTION>']
-    except KeyError:
-        caption = "No Caption Generated"
+        # Convert OpenCV BGR frame to PIL RGB image
+        image = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
-    draw = ImageDraw.Draw(image)
-    font = ImageFont.load_default()
-    draw.text((10, 10), caption, fill="red")
+        # Generate caption using Florence-2
+        prompt = "<CAPTION>"
+        inputs = processor(text=prompt, images=image, return_tensors="pt").to(device, torch_dtype)
+        
+        with torch.no_grad():
+            generated_ids = model.generate(
+                input_ids=inputs["input_ids"],
+                pixel_values=inputs["pixel_values"],
+                max_new_tokens=1024,
+                num_beams=3,
+                do_sample=False
+            )
+        
+        generated_text = processor.batch_decode(generated_ids, skip_special_tokens=False)[0]
 
-    frame_with_caption = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+        try:
+            caption = processor.post_process_generation(
+                generated_text,
+                task="<CAPTION>",
+                image_size=(image.width, image.height)
+            )['<CAPTION>']
+        except KeyError:
+            caption = "No Caption Generated"
 
-    cv2.imshow("Smart Glasses", frame_with_caption)
+        # Draw the caption on the image
+        draw = ImageDraw.Draw(image)
+        font = ImageFont.load_default()
+        draw.text((10, 10), caption, fill="red")
 
-    if time.time() - last_store_time >= store_interval:
-        store_image_in_db(image)
-        print("Annotated image automatically stored.")
-        last_store_time = time.time()
+        # Convert back to OpenCV format and display
+        frame_with_caption = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+        frame_with_caption = cv2.resize(frame_with_caption, (640, 480))
+        cv2.imshow("ESP32-CAM with Caption", frame_with_caption,)
 
-    key = cv2.waitKey(1) & 0xFF
-    if key == ord('q'):
-        break
-    elif key == ord('s'):
-        store_image_in_db(image)
-        print("Annotated image manually stored in the database.")
+        # Save images automatically at intervals
+        if time.time() - last_store_time >= store_interval:
+            store_image_in_db(image)
+            print("✅ Annotated image stored automatically.")
+            last_store_time = time.time()
 
+        # Keyboard controls
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('q'):
+            break
+        elif key == ord('s'):
+            store_image_in_db(image)
+            print("✅ Image manually stored.")
+
+    except UnidentifiedImageError:
+        print("❌ ESP32-CAM sent an invalid image. Skipping frame.")
+        continue
+
+# Cleanup
 cap.release()
 cv2.destroyAllWindows()
 conn.close()
