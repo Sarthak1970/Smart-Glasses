@@ -91,12 +91,10 @@ while True:
         font = ImageFont.load_default()
         draw.text((10, 10), caption, fill="red")
 
-        # Convert back to OpenCV format and display
         frame_with_caption = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
         frame_with_caption = cv2.resize(frame_with_caption, (640, 480))
         cv2.imshow("ESP32-CAM with Caption", frame_with_caption,)
 
-        # Save images automatically at intervals
         if time.time() - last_store_time >= store_interval:
             store_image_in_db(image)
             print("✅ Annotated image stored automatically.")
