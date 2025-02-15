@@ -1,16 +1,27 @@
 import sqlite3
-import io
 import base64
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS  
 
 app = Flask(__name__)
-CORS(app)  # 
+CORS(app)
 
-def retrieve_images_by_partial_timestamp(partial_timestamp):
+def retrieve_images(partial_caption=None, partial_timestamp=None):
     conn = sqlite3.connect('captured_images.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT timestamp, image_data FROM Images WHERE timestamp LIKE ?", (f"%{partial_timestamp}%",))
+    
+    query = "SELECT timestamp, image_data FROM Images WHERE 1=1"
+    params = []
+
+    if partial_caption:
+        query += " AND caption LIKE ?"
+        params.append(f"%{partial_caption}%")
+    
+    if partial_timestamp:
+        query += " AND timestamp LIKE ?"
+        params.append(f"%{partial_timestamp}%")
+
+    cursor.execute(query, params)
     rows = cursor.fetchall()
     conn.close()
 
@@ -23,16 +34,18 @@ def retrieve_images_by_partial_timestamp(partial_timestamp):
 
 @app.route('/api/images', methods=['GET'])
 def get_images():
-    partial_timestamp = request.args.get('timestamp')
-    if not partial_timestamp:
-        return jsonify({"error": "Timestamp is required"}), 400
+    partial_caption = request.args.get('caption', '').strip()
+    partial_timestamp = request.args.get('timestamp', '').strip()
 
-    images = retrieve_images_by_partial_timestamp(partial_timestamp)
+    if not partial_caption and not partial_timestamp:
+        return jsonify({"error": "At least one of caption or timestamp is required"}), 400
+
+    images = retrieve_images(partial_caption if partial_caption else None, partial_timestamp if partial_timestamp else None)
+
     if not images:
         return jsonify({"message": "No images found"}), 404
 
     return jsonify(images)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True) 
-
+if __name__ == '_main_':
+    app.run(host='0.0.0.0', port=5000, debug=True)
