@@ -75,5 +75,30 @@ def get_images():
 
     return jsonify(images)
 
+@app.route('/api/images/latest', methods=['GET'])
+def get_latest_image():
+    print("GET /api/images/latest endpoint was hit")
+    """API endpoint to get the most recently added image."""
+    conn = sqlite3.connect('captured_images.db')
+    cursor = conn.cursor()
+
+    query = "SELECT timestamp, image_data, caption, ocr_text FROM Images ORDER BY timestamp DESC LIMIT 1"
+    cursor.execute(query)
+    row = cursor.fetchone()
+    conn.close()
+
+    if row:
+        timestamp, img_data, caption, ocr_text = row
+        img_base64 = base64.b64encode(img_data).decode('utf-8')
+        image_info = {
+            "timestamp": timestamp,
+            "image": f"data:image/jpeg;base64,{img_base64}",
+            "caption": caption,
+            "ocr_text": ocr_text
+        }
+        return jsonify(image_info)
+
+    return jsonify({"message": "No image found"}), 404
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
