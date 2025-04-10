@@ -92,7 +92,7 @@ def get_latest_image():
         img_base64 = base64.b64encode(img_data).decode('utf-8')
         image_info = {
             "timestamp": timestamp,
-            "image": f"data:image/jpeg;base64,{img_base64}",
+            # "image": f"data:image/jpeg;base64,{img_base64}",
             "caption": caption,
             "ocr_text": ocr_text
         }
