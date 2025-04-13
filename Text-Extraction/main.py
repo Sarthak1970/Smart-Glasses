@@ -84,7 +84,7 @@ def speak_text(text):
 # Open stream
 cap = cv2.VideoCapture(FLASK_IMAGE_URL)
 if not cap.isOpened():
-    print("❌ Could not connect to video stream.")
+    print("Could not connect to video stream.")
     exit()
 
 store_interval = 3  # seconds
@@ -120,14 +120,14 @@ while True:
         cv2.putText(display_frame, f"OCR: {ocr_text[:50]}...", (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
 
-    cv2.imshow("🔴 Live Video Feed", cv2.resize(display_frame, (640, 480)))
+    cv2.imshow("Live Video Feed", cv2.resize(display_frame, (640, 480)))
 
     key = cv2.waitKey(1) & 0xFF
     if key == ord('q'):
         break
     elif key == ord('s'):
         store_frame(frame, caption, ocr_text)
-        print("✅ Manually saved frame.")
+        print("Manually saved frame.")
     elif key == ord('t'):
         speak_text(caption)
     elif key == ord('o'):
