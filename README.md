@@ -12,14 +12,14 @@ This repository contains the code and resources for developing smart glasses aim
 - [Acknowledgments](#acknowledgments)
 
 ## Project Overview
-Smart Glasses for the Visually Impaired are designed to assist people with visual impairments by using AI-powered features to interpret and describe their surroundings. The glasses use a combination of cameras, sensors, and audio feedback to relay important information to the user.
+Smart Glasses for the Visually Impaired are designed to assist people with visual impairments by using AI-powered features to interpret and describe their surroundings. The glasses use a combination of cameras, sensors, and display feedback to relay important information to the user.
 
 ## Features
 - **Object Detection**: Identifies objects in the environment and provides audio feedback to describe them.
 - **Text Recognition (OCR)**: Reads printed or handwritten text and converts it to speech.
 - **Navigation Assistance**: Alerts the user to obstacles and provides directions.
 - **Face Recognition**: Identifies known faces and notifies the user.
-- **Audio Feedback**: All information is delivered to the user through an integrated audio system.
+  
 
 ## Installation
 1. **Clone the Repository**:
@@ -33,7 +33,7 @@ Smart Glasses for the Visually Impaired are designed to assist people with visua
      pip install -r requirements.txt
      ```
 3. **Set Up Hardware**:
-   - Connect the ESP32-CAM module and audio output device to the processing unit.
+   - Connect the Pi-Cam module and display output device to the processing unit.
 
 ## Usage
 1. **Run the Main Program**:
@@ -45,15 +45,18 @@ Smart Glasses for the Visually Impaired are designed to assist people with visua
 
 ## Hardware Requirements
 - **Processing Unit**: Raspberry Pi
-- ![image](https://github.com/user-attachments/assets/4a72fe96-931b-4b2c-8800-62a91e09237e)
+  ![image](https://github.com/user-attachments/assets/4a72fe96-931b-4b2c-8800-62a91e09237e)
 
-- **Camera Module**: Integrated with the ESP32-CAM for image capture and streaming
-- **Audio Output**: Bone conduction headphones or speakers
+- **Camera Module**: Integrated with the Pi-Cam for image capture and streaming
+  ![image](https://github.com/user-attachments/assets/36aafa50-bd91-4299-ba63-37d68736cfee)
+  
+- **Oled Display**: shows retrieved images/text
+  
 - **Battery Pack**: Portable power supply for mobility
 
 ## Architecture
 The smart glasses system is composed of several components:
-1. **Camera Input**: Captures real-time video and images using the ESP32-CAM module.
+1. **Camera Input**: Captures real-time video and images using the PI-Cam module.
 2. **AI Processing Unit**: Analyzes visual data using models for object detection, OCR, and facial recognition.
 3. **Audio Feedback**: Converts visual information into speech for the user.
 4. **Navigation Assistance**: Uses sensors to detect obstacles and guide the user.
