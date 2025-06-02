@@ -44,7 +44,9 @@ Smart Glasses for the Visually Impaired are designed to assist people with visua
 3. Adjust settings as needed in the `config.json` file to optimize performance for your environment.
 
 ## Hardware Requirements
-- **Processing Unit**: ESP32-CAM module
+- **Processing Unit**: Raspberry Pi
+- ![image](https://github.com/user-attachments/assets/4a72fe96-931b-4b2c-8800-62a91e09237e)
+
 - **Camera Module**: Integrated with the ESP32-CAM for image capture and streaming
 - **Audio Output**: Bone conduction headphones or speakers
 - **Battery Pack**: Portable power supply for mobility
