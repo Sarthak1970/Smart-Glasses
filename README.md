@@ -64,7 +64,7 @@ Smart Glasses for the Visually Impaired are designed to assist people with visua
 ## Architecture
 The smart glasses system is composed of several components:
 1. **Camera Input**: Captures real-time video and images using the Pi-Cam module.
-2. **AI Processing Unit**: Analyzes visual data using models for object detection, OCR, and facial recognition.
+2. **AI Processing Unit**: Analyzes visual data using models for object detection, OCR, Image captioning and facial recognition.
 3. **Audio Feedback**: Converts visual information into speech for the user.
 4. **Navigation Assistance**: Uses sensors to detect obstacles and guide the user.
 
