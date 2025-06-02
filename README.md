@@ -44,12 +44,12 @@ Smart Glasses for the Visually Impaired are designed to assist people with visua
 3. Adjust settings as needed in the `config.json` file to optimize performance for your environment.
 
 ## Hardware Requirements
-- **Processing Unit**: Raspberry Pi
+- **Processing Unit**: Raspberry Pi 5(4gb)
 
   
   ![image](https://github.com/user-attachments/assets/4a72fe96-931b-4b2c-8800-62a91e09237e)
 
-- **Camera Module**: Integrated with the Pi-Cam for image capture and streaming
+- **Camera Module**:  Pi-Cam for image capture and streaming
   
 
   
