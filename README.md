@@ -45,6 +45,8 @@ Smart Glasses for the Visually Impaired are designed to assist people with visua
 
 ## Hardware Requirements
 - **Processing Unit**: Raspberry Pi
+
+  
   ![image](https://github.com/user-attachments/assets/4a72fe96-931b-4b2c-8800-62a91e09237e)
 
 - **Camera Module**: Integrated with the Pi-Cam for image capture and streaming
@@ -53,7 +55,7 @@ Smart Glasses for the Visually Impaired are designed to assist people with visua
   
 - **Oled Display**: shows retrieved images/text
 
-- 
+  
   ![image](https://github.com/user-attachments/assets/b050d4a6-117e-4261-9fc5-e5e2a9b4f814)
 
   
