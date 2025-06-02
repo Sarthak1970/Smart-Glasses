@@ -47,17 +47,17 @@ Smart Glasses for the Visually Impaired are designed to assist people with visua
 - **Processing Unit**: Raspberry Pi 5(4gb)
 
   
-  ![image](https://github.com/user-attachments/assets/4a72fe96-931b-4b2c-8800-62a91e09237e)
+  <img src="https://github.com/user-attachments/assets/4a72fe96-931b-4b2c-8800-62a91e09237e" width="300"/>
 
 - **Camera Module**:  Pi-Cam for image capture and streaming
-  ![image](https://github.com/user-attachments/assets/43f43a63-486a-4862-bc6c-4322246fa5d9)
+  <img src="https://github.com/user-attachments/assets/43f43a63-486a-4862-bc6c-4322246fa5d9" width="300"/>
 
 
   
 - **Oled Display**: shows retrieved images/text
 
   
-  ![image](https://github.com/user-attachments/assets/b050d4a6-117e-4261-9fc5-e5e2a9b4f814)
+  <img src="https://github.com/user-attachments/assets/b050d4a6-117e-4261-9fc5-e5e2a9b4f814" width="300"/>
 
   
 - **Battery Pack**: Portable power supply for mobility
