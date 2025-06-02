@@ -17,6 +17,7 @@ Smart Glasses for the Visually Impaired are designed to assist people with visua
 ## Features
 - **Object Detection**: Identifies objects in the environment and provides audio feedback to describe them.
 - **Text Recognition (OCR)**: Reads printed or handwritten text and converts it to speech.
+- **Image Captioning(Blip)**:generate a descriptive text for an image using computer vision and blip.
 - **Navigation Assistance**: Alerts the user to obstacles and provides directions.
 - **Face Recognition**: Identifies known faces and notifies the user.
   
@@ -51,7 +52,7 @@ Smart Glasses for the Visually Impaired are designed to assist people with visua
 
 - **Camera Module**:  Pi-Cam for image capture and streaming
 
-  <img src="https://github.com/user-attachments/assets/43f43a63-486a-4862-bc6c-4322246fa5d9" width="200"/>
+  <img src="https://github.com/user-attachments/assets/43f43a63-486a-4862-bc6c-4322246fa5d9" width="250"/>
 
 
   
