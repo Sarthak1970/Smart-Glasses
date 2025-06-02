@@ -48,7 +48,7 @@ Smart Glasses for the Visually Impaired are designed to assist people with visua
   ![image](https://github.com/user-attachments/assets/4a72fe96-931b-4b2c-8800-62a91e09237e)
 
 - **Camera Module**: Integrated with the Pi-Cam for image capture and streaming
-  ![image](https://github.com/user-attachments/assets/18e553a4-0a84-481f-9cea-3ba9b9649395)
+  
 
   
 - **Oled Display**: shows retrieved images/text
